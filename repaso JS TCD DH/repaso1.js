@@ -173,44 +173,91 @@ const departamentos = [
 /*******************************/
 
   // A. Hacer un objeto llamado inmobiliaria, con una propiedad "departamentos", y utilizar los array suministrados
+let inmobiliaria ={
+   
+  departamentos: departamentos,
 
 
 
   // B. Agregar un método listarDepartamentos que reciba como parámetro un array de departamentos y los imprima por consola.
   // “id: 2, precio $ 7500, está Disponible, 4 ambientes, máximo 3 personas, acepta mascotas, propietarios: dueña: Laura Gutierrez”
- 
+ listarDepartamentos: function (arrayDepartamentos){
+   for (let i= 0; i <arrayDepartamentos.length; i++){
+    let disponibilidad=  arrayDepartamentos[i].disponible ? "Disponible" : "Alquilado";
+    let mascotas = arrayDepartamentos[i].aceptaMascotas ? "acepta" : "no acepta";
+
+    console.log( `id: ${arrayDepartamentos[i].id}, precio $ ${arrayDepartamentos[i].precioAlquiler}, está ${disponibilidad}, ${arrayDepartamentos[i].ambientes} ambientes, máximo ${arrayDepartamentos[i].cantidadPersonas} personas, ${mascotas} mascotas, propietario: ${arrayDepartamentos[i].propietarios}`);
+   }
+ },
 
 
   // C. Agregar un método departamentosDisponibles que permita consultar disponibilidad, 
   //    es decir, que devuelva una lista de los departamentos disponibles.
-  
+  departamentosDisponibles: function (){
+    let disponibles = [];
+    for (let i=0; i< this.departamentos.length; i++){
+      if(this.departamentos[i].disponible){
+        disponibles.push(this.departamentos[i]);
+      }
+    } 
+    return disponibles;
+  },
 
 
-  // D. Agregar un método buscarPorId que permita buscar el departamento en función de su 
-  //identificador.
+  // D. Agregar un método buscarPorId que permita buscar el departamento en función de su identificador.
   // Este método debe devolver un departamento en caso de encontrar el identificador.
-  
+  buscarPorId: function(id){
+for (let i=0; i<this.departamentos.length;  i++){
+  if(id=== this.departamentos[i].id){
+    return this.departamentos[i];
+  }
+}
+  },
 
 
   // E. Agregar un método buscarPorPrecio que permita filtrar los departamentos disponibles, 
   //siempre y cuando el precio sea menor o igual al precio enviado como argumento.
   // Este método debe usar departamentosDiponibles.
   // Este método debe devolver una lista de departamentos.
-  
-
+  buscarPorPrecio : function (precio){
+    let disponibles = this.departamentosDisponibles();
+    let arrayResultado=[];
+    for (let i =0; i<disponibles.length; i++){
+      if(disponibles[i].precioAlquiler <=precio){
+        arrayResultado.push(disponibles[i]);
+      }
+    }
+return arrayResultado;
+  },
 
   // F.  Agregar un método precioConImpuesto que permita realizar un incremento del precioAlquiler 
   // a todos los departamentos, tanto disponibles como no disponibles, según un porcentaje que se 
   // envía como argumento al momento de la invocación del método.
   // ejemplo : PrecioConImpuesto(10), deberá incrementar el precioAlquiler de Todos los departamentos un 10%
- 
+ precioConImpuesto : function (porcentaje){
+   let porcentajesAaumentar= porcentaje /100 + 1;
+for (let i =0; i<this.departamentos.length; i++){
+  this.departamentos[i].precioAlquiler *= porcentajesAaumentar;
+}
+return this.departamentos;
+ },
+
 
 
   // G. Agregar un método simplificarPropietarios que permita modificar los textos de la propiedad propietarios para que en lugar de decir “Dueños: ….”, “Dueña: ….”, etc. diga “Prop.: ….”
   // ejemplo : "Dueños: Martín Gutierrez y José Torres" pasará a ser "Prop.: Martín Gutierrez y José Torres"
-  
-// inmobiliaria.alquilar(14)
-// console.log(inmobiliaria.filtrarPetFriendly());
+  simplificarPropietarios : function (){
+    for (let i= 0; i<this.departamentos.length; i++){
+      let propietarios = this.departamentos[i].propietarios;
+      let guardar= propietarios.indexOf(":");
+      let nombrePropietarios = propietarios.slice(guardar);
+      this.departamentos[i].propietarios= "Prop. " + nombrePropietarios;
+
+    }
+return this.departamentos;
+  }
+
+
 
 
 
